@@ -52,7 +52,98 @@ void Graph::depthInner(int current, bool visited[])
     {
         if (edgeExists(current, i) && !visited[i])
             depthInner(i, visited); // если существует ребро и вершина не посещалась, то пройдем по нему в смежную вершину
-
     }
 }
 
+void Graph::width(int start)
+{
+    int queue_to_visit[SIZE]; // очередь вершин для обхода
+    int queueCount = 0;
+
+    bool visited[SIZE]; // список посещенных вершин
+    for (int i = 0; i < SIZE; i++)
+        visited[i] = false;
+
+    queue_to_visit[queueCount++] = start; // кладем в очередь начальную вершину
+    while (queueCount > 0)
+    {
+        // взятие из очереди вершины
+        int current = queue_to_visit[0];
+        queueCount--;
+        for (int i = 0; i < queueCount; i++)
+        {
+            queue_to_visit[i] = queue_to_visit[i + 1];
+        }
+        visited[current] = true;
+        std::cout << "v" << current << " -> ";
+        // поиск смежных вершин и добавление их в очередь
+        for (int i = 0; i < SIZE; i++)
+        {
+            bool alreadyAdded = false;
+            for (int j = 0; j < queueCount; j++)
+                if (queue_to_visit[j] == i)
+                {
+                    alreadyAdded = true;
+                    break;
+                }
+            if (!alreadyAdded && edgeExists(current, i) && !visited[i])
+                queue_to_visit[queueCount++] = i;
+        }
+    }
+    std::cout << std::endl;
+}
+int Graph::findPathCount(int from, int to)
+{
+   
+   int numberPaths = 0;  // количество возможных путей
+   bool visited[SIZE]; // список посещенных вершин
+   for (int i = 0; i < SIZE; i++)
+       visited[i] = false;
+   int arrCountPaths[SIZE];
+   for (int i = 0; i < SIZE; i++)
+       arrCountPaths[i] = 0;
+     findPathCountInner(visited,to,numberPaths,from,arrCountPaths); // запуск алгоритма 
+  
+             return numberPaths;
+ 
+}
+
+void Graph::findPathCountInner(bool visited[], int to, int& numberPaths, int current,int arrCountPaths[])
+{
+   if (current == to) // если попали в конечную точку увеличиваем количество путей 
+    {
+       for (int v = 0; v < SIZE; ++v)
+       {
+           if (!arrCountPaths[v])
+               visited[v] = false;
+       }
+        ++numberPaths;
+               return;
+    }
+    int queue_to_visit[SIZE]; // очередь вершин для обхода из текущей вершины
+    int countEdge = 0;  // количество вершин для обхода
+    for (int i = 0, j=0; i < SIZE; i++) // поиск вершин для следующего шага 
+     {
+        if (edgeExists(current, i)&& !visited[i]) // усли существует ребро и оно ведёт не в предыдущую и не вначальную вершину 
+        {
+            queue_to_visit[j] = i;                           // добавляем в очередь 
+            ++j;
+             ++countEdge;                                     // и увеличиваем счётчик
+        }
+    }
+    if (countEdge > 0)
+    {
+        visited[current] = true;
+    }
+    arrCountPaths[current] = countEdge;
+    for (int i = 0; i < countEdge; i++) // переходи в следующую вершину если такая есть
+    {
+        findPathCountInner(visited, to, numberPaths, queue_to_visit[i], arrCountPaths);
+        --arrCountPaths[current];
+        if (!arrCountPaths[current])
+            visited[current] = false;
+    }
+  
+}
+
+   
