@@ -1,7 +1,7 @@
 ﻿#include "graph.h"
 #include <iostream>
 
-
+#define VERYBIGINT 1000000000
 Graph::Graph() {
     for (int i = 0; i < SIZE; i++)
         for (int j = 0; j < SIZE; j++)
@@ -124,7 +124,7 @@ void Graph::findPathCountInner(bool visited[], int to, int& numberPaths, int cur
     int countEdge = 0;  // количество вершин для обхода
     for (int i = 0, j=0; i < SIZE; i++) // поиск вершин для следующего шага 
      {
-        if (edgeExists(current, i)&& !visited[i]) // усли существует ребро и оно ведёт не в предыдущую и не вначальную вершину 
+        if (edgeExists(current, i)&& !visited[i]) // если существует ребро и оно ведёт не в предыдущую и не вначальную вершину 
         {
             queue_to_visit[j] = i;                           // добавляем в очередь 
             ++j;
@@ -146,4 +146,62 @@ void Graph::findPathCountInner(bool visited[], int to, int& numberPaths, int cur
   
 }
 
-   
+int Graph::findMinWayDFS(int from, int to)
+{
+    int minDistance = VERYBIGINT;  // количество возможных путей
+    int currentPath = 0; //текущая длина пути
+    bool visited[SIZE]; // список посещенных вершин
+    for (int i = 0; i < SIZE; i++)
+        visited[i] = false;
+    int arrCountPaths[SIZE];
+    for (int i = 0; i < SIZE; i++)
+        arrCountPaths[i] = 0;
+
+    findMinWayDFSInner(visited, to, minDistance, currentPath, from, arrCountPaths); // запуск алгоритма 
+
+    return minDistance;
+}
+
+void Graph::findMinWayDFSInner(bool visited[], int to, int& minDistance,int currentPath,int current, int arrCountPaths[])
+{
+    if (current == to) // если попали в конечную точку увеличиваем количество путей 
+    {
+        for (int v = 0; v < SIZE; ++v)
+        {
+            if (!arrCountPaths[v])
+                visited[v] = false;
+        }
+        if (currentPath < minDistance)
+        {
+            minDistance = currentPath;
+        }
+        return;
+    }
+    int queue_to_visit[SIZE]; // очередь вершин для обхода из текущей вершины
+    int countEdge = 0;  // количество вершин для обхода
+    int arrEdgeWeights[SIZE];//массив веса смежных рёбер для вершины
+    for (int i = 0, j = 0; i < SIZE; i++) // поиск вершин для следующего шага 
+    {
+        if (edgeExists(current, i) && !visited[i]) // если существует ребро и оно ведёт не посещённую вершину
+        {
+            queue_to_visit[j] = i;                           // добавляем в очередь 
+            arrEdgeWeights[j] = matrix[current][i];          // заносим вес ребра для этой пары вершин
+            ++j;
+            ++countEdge;                                     // и увеличиваем счётчик
+        }
+    }
+    if (countEdge > 0)
+    {
+        visited[current] = true;
+    }
+    arrCountPaths[current] = countEdge;
+    for (int i = 0; i < countEdge; i++) // переходим в следующую вершину если такая есть
+    {
+        
+        findMinWayDFSInner(visited, to, minDistance, currentPath + arrEdgeWeights[i] , queue_to_visit[i], arrCountPaths);
+        --arrCountPaths[current];
+        if (!arrCountPaths[current])
+            visited[current] = false;
+    }
+
+}

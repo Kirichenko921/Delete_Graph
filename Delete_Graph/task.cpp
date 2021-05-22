@@ -64,7 +64,7 @@ int main()
         std::cout << g.vertexes[i] << std::endl;
 
     }*/
-   Graph g;
+  /* Graph g;
     g.addVertex(0);
     g.addVertex(1);
     g.addVertex(2);
@@ -88,7 +88,7 @@ int main()
     g.addEdge(3, 8, 1);
     g.addEdge(5, 8, 1);
     g.addEdge(8, 6, 1);
-    g.addEdge(7, 6, 1);
+    g.addEdge(7, 6, 1);*/
 
    // g.depth(0);
    // g.width(0);
@@ -105,7 +105,7 @@ int main()
     g.addEdge(1, 2, 11);
     g.addEdge(2, 3, 9);*/
 
-    std::cout << g.findPathCount(0, 6) << std::endl;
+    /*std::cout << g.findPathCount(0, 6) << std::endl;
     Graph gr;
     gr.addVertex(0);
     gr.addVertex(1);
@@ -123,6 +123,26 @@ int main()
     gr.addEdge(2, 4, 1);
     gr.addEdge(4, 5, 1);
 
-    std::cout << gr.findPathCount(0, 1) << std::endl;
+    std::cout << gr.findPathCount(0, 1) << std::endl;*/
+
+    Graph gMinWay;
+
+    gMinWay.addVertex(0);
+    gMinWay.addVertex(1);
+    gMinWay.addVertex(2);
+    gMinWay.addVertex(3);
+    gMinWay.addVertex(4);
+    gMinWay.addVertex(5);
+
+    gMinWay.addEdge(0, 2, 13);
+    gMinWay.addEdge(0, 4, 21);
+    gMinWay.addEdge(0, 5, 27);
+    gMinWay.addEdge(2, 3, 82);
+    gMinWay.addEdge(2, 4, 77);
+    gMinWay.addEdge(4, 1, 43);
+    gMinWay.addEdge(4, 5, 11);
+    gMinWay.addEdge(5, 1, 38);
+
+    std::cout << gMinWay.findMinWayDFS(0, 1) << std::endl;
     return 0;
 }

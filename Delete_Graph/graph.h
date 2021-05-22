@@ -23,8 +23,8 @@ public:
     void width(int start);
     int findPathCount(int from, int to); // поиск всех возможных путей от одной вершины к другой
     void findPathCountInner(bool visited[], int to, int& numberPaths, int current, int arrCountPaths[]); // поиск всех возможных путей от одной вершины к другой внутренння функция
-  
-
+    int findMinWayDFS(int from, int to); // поиск минимального расстояния между двумя вершинами
+    void findMinWayDFSInner(bool visited[], int to, int& minDistance, int currentPath, int current, int arrCountPaths[]);// поиск минимального расстояния между двумя вершинами внутренння функция
     friend bool test(const Graph& g);
     void dummy1(int vnumber);
     void dummy2(int v1, int v2);
